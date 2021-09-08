@@ -19,7 +19,7 @@ const update = async (id, title, author, category, registrationDate, userId) => 
     return {
       error: true,
       code: "invalid_data",
-      message: "Algo deu errado",
+      message: "Invalid entries. Try again.",
       statusCode: 401,
     };
   }
@@ -32,15 +32,37 @@ const remove = async (id) => {
     return {
       error: true,
       code: "invalid_data",
-      message: "Algo deu errado",
+      message: "Invalid entries. Try again.",
       statusCode: 500,
     };
   }
   return book;
 };
 
+const getAllDetails = async (title, author, category, registrationDate, dateOfChange) => {
+  const books = {};
+  if (title) {
+    books.title = title;
+  }
+  if (author) {
+    books.author = author;
+  }
+  if (category) {
+    books.category = category;
+  }
+  if (registrationDate) {
+    books.registrationDate = registrationDate;
+  }
+  if (dateOfChange) {
+    books.dateOfChange = dateOfChange;
+  }
+  
+  return model.getAllDetails(books)
+}
+
 module.exports = {
   create,
   update,
   remove,
+  getAllDetails,
 };

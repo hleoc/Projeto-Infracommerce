@@ -2,16 +2,27 @@ const { ObjectId } = require("mongodb");
 
 const getCollection = require("./get-connection");
 
+const formatDate = require("../Middlewares/formatDate");
+
 const create = async (title, author, category, userId) =>
   getCollection("books")
-    .then((book) => book.insertOne({ title, author, category, userId }))
+    .then((book) =>
+      book.insertOne({
+        title,
+        author,
+        category,
+        registrationDate: formatDate.dataAtualFormatada(),
+        dateOfChange: formatDate.dataAtualFormatada(),
+        userId,
+      }),
+    )
     .then((result) => ({
       _id: result.insertedId,
       title,
       author,
       category,
-      registrationDate: new Date(),
-      dateOfChange: new Date(),
+      registrationDate: formatDate.dataAtualFormatada(),
+      dateOfChange: formatDate.dataAtualFormatada(),
       userId,
     }));
 
@@ -28,7 +39,15 @@ const update = async (id, { title, author, category, registrationDate }, userId)
       { $set: { title, author, category, registrationDate, userId } },
     ),
   );
-  return { _id: id, title, author, category, registrationDate, dateOfChange: new Date(), userId };
+  return {
+    _id: id,
+    title,
+    author,
+    category,
+    registrationDate,
+    dateOfChange: formatDate.dataAtualFormatada(),
+    userId,
+  };
 };
 
 const exclude = async (id) => {
@@ -36,9 +55,27 @@ const exclude = async (id) => {
   return getCollection("books").then((book) => book.deleteOne({ _id: ObjectId(id) }));
 };
 
+const getAllDetails = async (books) => {
+  if (!books.registrationDate || !books.dateOfChange) {
+    return await getCollection("books").then((book) => book.find({ ...books }).toArray());
+  } else if (books.registrationDate || books.dateOfChange) {
+    return await getCollection("books").then((book) =>
+      book
+        .find({
+          $or: [
+            { registrationDate: { $gte: books.registrationDate } },
+            { dateOfChange: { $lte: books.dateOfChange } },
+          ],
+        })
+        .toArray(),
+    );
+  }
+};
+
 module.exports = {
   create,
   getById,
   update,
   exclude,
+  getAllDetails,
 };
