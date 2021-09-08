@@ -37,7 +37,7 @@ sessions.post("/", async (req, res) => {
       userData: userWithoutPassword,
     };
     const token = jwt.sign(payload, SECRET, jwtConfig);
-    res.status(200).json({ token });
+    res.status(200).json({ sucess: true, token });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: error.message });
