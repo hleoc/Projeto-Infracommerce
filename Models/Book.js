@@ -31,8 +31,14 @@ const update = async (id, { title, author, category, registrationDate }, userId)
   return { _id: id, title, author, category, registrationDate, dateOfChange: new Date(), userId };
 };
 
+const exclude = async (id) => {
+  if (!ObjectId.isValid(id)) return null;
+  return getCollection("books").then((book) => book.deleteOne({ _id: ObjectId(id) }));
+};
+
 module.exports = {
   create,
   getById,
   update,
+  exclude,
 };

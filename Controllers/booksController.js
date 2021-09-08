@@ -18,8 +18,7 @@ books.post("/", auth, async (req, res) => {
     }
     return res.status(201).json({ sucess: true, book: newBook });
   } catch (error) {
-    // console.error(error)
-    res.status(500).json({ message: error });
+    return res.status(500).json({ message: error });
   }
 });
 
@@ -34,7 +33,19 @@ books.put("/:id", auth, async (req, res) => {
     }
     return res.status(200).json({ success: true, book: updateBook });
   } catch (error) {
-    res.status(500).json({ message: error });
+    return res.status(500).json({ message: error });
+  }
+});
+
+books.delete("/:id", auth, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const removeBook = await service.remove(id);
+    if (!auth) return res.status(401).json({ message: "missing auth token" });
+    return res.status(204).json(removeBook);
+  } catch (error) {
+    // console.error(error)
+    return res.status(500).json({ message: error });
   }
 });
 

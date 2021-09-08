@@ -18,15 +18,29 @@ const update = async (id, title, author, category, registrationDate, userId) => 
   if (!book) {
     return {
       error: true,
-      code: 'invalid_data',
-      message: 'Algo deu errado',
+      code: "invalid_data",
+      message: "Algo deu errado",
       statusCode: 401,
     };
   }
   return model.update(id, { title, author, category, registrationDate }, userId);
 };
 
+const remove = async (id) => {
+  const book = await model.exclude(id);
+  if (!book) {
+    return {
+      error: true,
+      code: "invalid_data",
+      message: "Algo deu errado",
+      statusCode: 500,
+    };
+  }
+  return book;
+};
+
 module.exports = {
   create,
   update,
+  remove,
 };
