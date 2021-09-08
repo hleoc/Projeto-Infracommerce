@@ -11,7 +11,7 @@ users.post("/", async (req, res) => {
     if (newUser.error) {
       return res.status(newUser.statusCode).json({ message: newUser.message });
     }
-    res.status(201).json({ user: newUser });
+    res.status(201).json({ sucess: true, user: newUser });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: error });
