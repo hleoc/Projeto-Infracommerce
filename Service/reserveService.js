@@ -9,10 +9,32 @@ const create = async (bookName, userName, bookingStatus) => {
       statusCode: 400,
     };
   }
-  //console.log("dados =====>", bookName, userName, bookingStatus);
   return model.create(bookName, userName, bookingStatus);
 };
 
+const getAllDetails = async (bookName, userName, bookingStatus,  bookingDate, returnDate) => {
+  const reserves = {};
+  if (bookName) {
+    reserves.bookName = bookName;
+  }
+  if (userName) {
+    reserves.userName = userName;
+  }
+  if (bookingStatus) {
+    reserves.bookingStatus = bookingStatus;
+  }
+  if (bookingDate) {
+    reserves.bookingDate = bookingDate;
+  }
+  if (returnDate) {
+    reserves.returnDate = returnDate;
+  }
+  
+  return model.getAllDetails(reserves)
+}
+
+
 module.exports = {
   create,
+  getAllDetails,
 };
