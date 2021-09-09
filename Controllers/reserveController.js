@@ -29,4 +29,16 @@ reserve.get('/search', auth, async (req, res) => {
   }
 });
 
+reserve.delete('/:id', auth, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const removeReserve = await service.remove(id);
+    if (!auth) return res.status(401).json({ message: 'missing auth token' });
+    return res.status(204).json(removeReserve);
+  } catch (error) {
+    console.log("error =====> ", error);
+    return res.status(500).json({ message: error });
+  }
+});
+
 module.exports = reserve;

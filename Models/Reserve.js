@@ -1,3 +1,5 @@
+const { ObjectId } = require("mongodb");
+
 const getCollection = require("./get-connection");
 
 const formatDate = require("../Middlewares/formatDate");
@@ -41,7 +43,13 @@ const getAllDetails = async (reserves) => {
   }
 };
 
+const exclude = async (id) => {
+  if (!ObjectId.isValid(id)) return null;
+  return getCollection("reserve").then((reserv) => reserv.deleteOne({ _id: ObjectId(id) }));
+};
+
 module.exports = {
   create,
   getAllDetails,
+  exclude,
 };

@@ -33,8 +33,21 @@ const getAllDetails = async (bookName, userName, bookingStatus,  bookingDate, re
   return model.getAllDetails(reserves)
 }
 
+const remove = async (id) => {
+  const reserve = await model.exclude(id);
+  if (!reserve) {
+    return {
+      error: true,
+      code: 'invalid_data',
+      message: "Invalid entries. Try again.",
+      statusCode: 500,
+    };
+  }
+  return reserve;
+};
 
 module.exports = {
   create,
   getAllDetails,
+  remove,
 };
