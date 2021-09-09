@@ -4,6 +4,7 @@ const APP_PORT = require("dotenv/config");
 const usersController = require("./Controllers/usersController");
 const sessionsController = require("./Controllers/sessionsController");
 const booksController = require("./Controllers/booksController");
+const reserveController = require("./Controllers/reserveController");
 
 const app = express();
 app.use(express.json());
@@ -11,6 +12,7 @@ app.use(express.json());
 app.use("/users", usersController);
 app.use("/sessions", sessionsController);
 app.use('/books', booksController);
+app.use("/reserve", reserveController);
 
 const port = process.env.APP_PORT;
 
